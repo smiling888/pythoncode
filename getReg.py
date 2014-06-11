@@ -60,8 +60,9 @@ def ReadReg(key,subKey,valueName):
 
 
 def getReg():
-    
-    
+    '''
+    函数目的：此函数需要安装Deksotop工具才能使用
+    '''
     winSourceServer = win32com.client.Dispatch("Sogou_WindowResource.WinResourceRetriver")
     itemName='HKEY_CURRENT_USER\\SOFTWARE\\SogouMobileTool'
     keyName="path"
