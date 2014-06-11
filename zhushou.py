@@ -762,3 +762,131 @@ def MonitorCrashAndRename(opt1,opt2):
             DelAppdataFile(dst)
         except:
             pass
+def CheckReg(quickLaunch=False):
+    '''
+	| ##@函数目的: 检查注册表各项是否正确
+	| ##@参数说明：opt1表示crash路径，opt2为casex.zip
+	| ##@返回值：
+	| ##@函数逻辑：
+	'''
+    #检查有的项
+    #Path
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool","Path")
+    if DesktopCommon.IsWin7():
+        if value!="C:\\Program Files (x86)\\SogouMobileTool":
+        print value,'path'
+        return False
+    elif value!="C:\\Program Files\\SogouMobileTool":
+        print value,'path'
+        return False
+    #Components
+    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Components")
+    
+    if not exist:
+        print exist,'components'
+        return False
+    
+    #pb
+    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\pb")
+    
+    if not exist:
+        print exist,'pb'
+        return False
+    #PopUpConfig助手弹窗设置的
+##    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\PopUpConfig")
+##    if not exist:
+##        print exist
+##        return False
+    #Update
+    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update")
+    if not exist:
+        print exist,'update'
+        return False
+    #Update 之Desktop
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","Desktop")
+    if value!="create":
+        print value,'create'
+        return False
+    #Update 之MainVersion
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","MainVersion")
+    if value!=str(GetZhushouVersion()):
+        print value,'MainVersion'
+        return False
+    #Update 之QS 若为创建快捷方式
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","QS")
+    if not quickLaunch and value!="nocreate":
+        print value,'QS'
+        return False
+    #Update 之Startmenu
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","Startmenu")
+    if value!="create":
+        print value,'startmenu'
+        return False
+    #Update 之UserExperience
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","UserExperience")
+    if value!="create":
+        print value,'UserExperience'
+        return False
+    
+    #SoDa
+    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\SoDa")
+    if not exist:
+        print exist,'SoDa'
+        return False
+    #MENG
+    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\MENG")
+    if not exist:
+        print exist,'MENG'
+        return False
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\MENG","sign")
+    if str(value)!=str(1):
+        print 'Meng',value
+        print 'No'
+        return False
+    
+    #Run开机启动项
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run","SogouMobileTool")
+    if DesktopCommon.IsWin7():
+        if value!="\"C:\\Program Files (x86)\\SogouMobileTool\\SogouMobileToolHelper.exe\"":
+        print value,'Run'
+        return False
+        
+    elif value!="\"C:\\Program Files\\SogouMobileTool\\SogouMobileToolHelper.exe\"":
+        print value,'Run'
+        return False
+    #Uninstall
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","DisplayIcon")
+    if DesktopCommon.IsWin7():
+        if value!="C:\\Program Files (x86)\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
+        print value,'Uninstall'
+        return False  
+    elif value!="C:\\Program Files\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
+        print value,'Uninstall'
+        return False
+    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","UninstallString")
+    if DesktopCommon.IsWin7():
+        if value!="C:\\Program Files (x86)\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
+        print value,'Uninstall'
+        return False  
+    elif value!="C:\\Program Files\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
+        print value,'Uninstall'
+        return False
+    #检查没有的项
+    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool")
+    if exist:
+        print '1',exist
+        return False  
+    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\SogouMobileTool")
+    if exist:
+        print '2',exist
+        return False
+    value=value=DesktopCommon.GetRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run","SogouMobileTool")
+    if len(value)!=0:
+        print '3',exist
+        return False
+    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool")
+    if exist:
+        print '4',exist
+        return False 
+    
+    return True
