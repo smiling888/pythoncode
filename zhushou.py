@@ -1,4 +1,4 @@
-#coding:gbk
+#coding=utf-8
 import os
 import traceback
 import subprocess
@@ -9,44 +9,61 @@ import ConfigParser
 import win32api
 import win32con
 
-import DesktopCommon
 
 
 def GetZhushouVersion():
 	'''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡ËÑ¹·ÊÖ»úÖúÊÖµÄ°æ±¾£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½°æ±¾ºÅÊ±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÎŞ
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»ÉèÖÃ°æ±¾ºÅ
+	| ##@å‡½æ•°ç›®çš„: è·å–æœç‹—æ‰‹æœºåŠ©æ‰‹çš„ç‰ˆæœ¬ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°ç‰ˆæœ¬å·æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šæ— 
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è®¾ç½®ç‰ˆæœ¬å·
 	'''
-	return "2.5.0.19092"
-def GetOldVersion():
-    '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡ËÑ¹·ÊÖ»úÖúÊÖµÄ°æ±¾£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½°æ±¾ºÅÊ±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÎŞ
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»ÉèÖÃ°æ±¾ºÅ
-	'''
-    return "2.1.0.11992"
-
+	return "2.5.0.19022"
+    
 def GetQNum():
+    '''
+	| ##@å‡½æ•°ç›®çš„: è·å–æœç‹—æ‰‹æœºåŠ©æ‰‹çš„ç‰ˆæœ¬ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°ç‰ˆæœ¬å·æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šæ— 
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è®¾ç½®ç‰ˆæœ¬å·
 	'''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡ÖúÊÖÇşµÀºÅ
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÎŞ
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»ÉèÖÃ°æ±¾ºÅ
+    return "000000"
+    
+
+def ShowCaseNum(num):
+    '''
+	| ##@å‡½æ•°ç›®çš„: æ˜¾ç¤ºæ‰§è¡Œcaseè¿›åº¦
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šæ— 
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è®¾ç½®ç‰ˆæœ¬å·
 	'''
-	return "000000"    
+    import ctypes
+#    ctypes.windll.user32.MessageBoxA(0,  'case '+str(num),"case number", 0)
+    import time
+    newpath="d:\\autotest\\log\\"
+    if not os. path.isdir(newpath):
+        os.makedirs(newpath)
+    name=newpath+"log.txt"
+    if not fileIsExists(name):
+        f=open(name,'w')      
+    else:
+        f=open(name,'a')
+    f.write(time.strftime("%Y-%m-%d:%H-%M-%S",time.localtime(time.time()))+'        case '+str(num))
+    f.write("\n")
+    f.close()
 
 def GetTempPath(opt= ""):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡±¾»útempÂ·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½tempÂ·¾¶Ê±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØtempÂ·¾¶
+	| ##@å‡½æ•°ç›®çš„: è·å–æœ¬æœºtempè·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°tempè·¯å¾„æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›tempè·¯å¾„
 	'''
-    strTmp = os.environ['tmp']
+    str = getpass.getuser()
+    strTmp = "C:\\Users\\"
+    strTmp = strTmp + str
+    strTmp = strTmp + "\\AppData\\Local\\Temp"
     if opt != "":
         strTmp = strTmp + opt
     return strTmp
@@ -54,101 +71,79 @@ def GetTempPath(opt= ""):
 def fileIsExists(filepath=''):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÅĞ¶ÏfilepathÖ¸ÏòµÄÎÄ¼şÊÇ·ñ´æÔÚ
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØtempÂ·¾¶
+	| ##@å‡½æ•°ç›®çš„: åˆ¤æ–­filepathæŒ‡å‘çš„æ–‡ä»¶æ˜¯å¦å­˜åœ¨
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›tempè·¯å¾„
 	'''
     return  os.path.isfile(filepath)
     
 def DelSMTShareFiles(path):
     '''
-    |##@É¾³ıSMTShareÄ¿Â¼ÏÂµÄ°²×°°ü
-    | ##@²ÎÊıËµÃ÷£ºÎŞ
-    | ##@·µ»ØÖµ£º1
-    | ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+    |##@åˆ é™¤SMTShareç›®å½•ä¸‹çš„å®‰è£…åŒ…
+    | ##@å‚æ•°è¯´æ˜ï¼šæ— 
+    | ##@è¿”å›å€¼ï¼š1
+    | ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
     '''
     allfilesname=os.listdir(path)
     for name in allfilesname:
         if name.find('SogouMobileToolSetup')!=-1:
-            fullpath=os.path.join(path,name)
-            try:
-                os.remove(fullpath)
-            except Exception,e:
-                print e               
+           fullpath=os.path.join(path,name)
+           os.remove(fullpath)
     return 1 
     
 
 def DelTempFile(tmpFileName):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: É¾³ıtempÄ¿Â¼ÏÂµÄÎÄ¼ş
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º1
-	| ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+	| ##@å‡½æ•°ç›®çš„: åˆ é™¤tempç›®å½•ä¸‹çš„æ–‡ä»¶
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š1
+	| ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
 	'''
     flag = os.path.isfile(tmpFileName)
     if flag == 1:
         try:
             os.remove(tmpFileName)
         except Exception,e:
-            print e  
+            print e
     return 1
 
 def GetAppdataPath(opt= ""):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡±¾»úappdataÂ·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½appdataÂ·¾¶Ê±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØappdataÂ·¾¶
+	| ##@å‡½æ•°ç›®çš„: è·å–æœ¬æœºappdataè·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°appdataè·¯å¾„æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›appdataè·¯å¾„
 	'''
-    strTmp = os.environ['appdata']
-##    if not DesktopCommon.IsWin7():
-##        strTmp=AddMark2Path(strTmp)
-    strTmp = strTmp + "\\SogouMobileTool\\SogouMobileToolUp\\Files"
+    str = getpass.getuser()
+    strTmp = "C:\\Users\\"
+    strTmp = strTmp + str
+    strTmp = strTmp + "\\AppData\\Roaming\\SogouMobileTool\\SogouMobileToolUp\\Files"
     if opt != "":
         strTmp = strTmp + opt
     return strTmp
 
-def AddMark2Path(path):
-    '''
-    | ##@º¯ÊıÄ¿µÄ: ÔÚÂ·¾¶ÖĞÓĞ¿Õ¸ñµÄ×Ö¶ÎÌí¼ÓÒıºÅ
-    | ##@²ÎÊıËµÃ÷£ºÈçC:\Documents and Settings ĞŞ¸ÄÖ®ºó±äÎªC:\"Documents and Settings"
-    | ##@·µ»ØÖµ£ºÂ·¾¶
-    | ##@º¯ÊıÂß¼­£º·µ»ØĞŞÕıÖ®ºóµÄ×Ö¶Î 
-    '''
-    patharr=path.split("\\")
-    path=''
-    for e in patharr:
-        #print e
-        if e.find(' ')!=-1:
-            e="\""+e+"\""
-        path=path+"\\"+e
-    return path[1:]
-
 def DelAppdataFile(tmpFileName):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: É¾³ıappdataÄ¿Â¼ÏÂµÄÎÄ¼ş
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º1
-	| ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+	| ##@å‡½æ•°ç›®çš„: åˆ é™¤appdataç›®å½•ä¸‹çš„æ–‡ä»¶
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š1
+	| ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
 	'''
     flag = os.path.isfile(tmpFileName)
     if flag == 1:
-        try:
-            os.remove(tmpFileName)
-        except Exception,e:
-            print e 
+        os.remove(tmpFileName)
     return 1
 
 def DelAppdataFileHelper():
     '''
-    |##@É¾³ıÄ¿Â¼ÏÂµÄ°²×°°ü
-    | ##@²ÎÊıËµÃ÷£ºÎŞ
-    | ##@·µ»ØÖµ£º1
-    | ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+    |##@åˆ é™¤ç›®å½•ä¸‹çš„å®‰è£…åŒ…
+    | ##@å‚æ•°è¯´æ˜ï¼šæ— 
+    | ##@è¿”å›å€¼ï¼š1
+    | ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
     '''
     appdatafilepath=GetAppdataPath()
     allfilesname=os.listdir(appdatafilepath)
@@ -161,51 +156,61 @@ def DelAppdataFileHelper():
 
 def DelAppdataFileExe():
     '''
-    |##@É¾³ıÄ¿Â¼ÏÂµÄ°²×°°ü
-    | ##@²ÎÊıËµÃ÷£ºÎŞ
-    | ##@·µ»ØÖµ£º1
-    | ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+    |##@åˆ é™¤ç›®å½•ä¸‹çš„å®‰è£…åŒ…
+    | ##@å‚æ•°è¯´æ˜ï¼šæ— 
+    | ##@è¿”å›å€¼ï¼š1
+    | ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
     '''
     appdatafilepath=GetAppdataPath()
-    if not os.path.exists(appdatafilepath):
-        return 1
     allfilesname=os.listdir(appdatafilepath)
     for name in allfilesname:
         if name.find('SogouMobileToolSetup')!=-1:
            fullpath=os.path.join(appdatafilepath,name)
            try:
-                os.remove(fullpath)
+               os.remove(fullpath)
            except Exception,e:
-                print e 
-               
+               print e
     return 1 
-    
-
     
 def DelAppdataFileUp():
     '''
-	| ##@º¯ÊıÄ¿µÄ: É¾³ıappdataÄ¿Â¼ÏÂµÄÉı¼¶°üÎÄ¼ş
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º1
-	| ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+    |##@åˆ é™¤ç›®å½•ä¸‹çš„å‡çº§åŒ…
+    | ##@å‚æ•°è¯´æ˜ï¼šæ— 
+    | ##@è¿”å›å€¼ï¼š1
+    | ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
+    '''
+    appdatafilepath=GetAppdataPath()
+    allfilesname=os.listdir(appdatafilepath)
+    for name in allfilesname:
+        if name.find('Up')!=-1:
+           fullpath=os.path.join(appdatafilepath,name)
+           try:
+               os.remove(fullpath)
+           except Exception,e:
+               print e
+    return 1 
+    
+def DelAppdataFileUp():
+    '''
+	| ##@å‡½æ•°ç›®çš„: åˆ é™¤appdataç›®å½•ä¸‹çš„å‡çº§åŒ…æ–‡ä»¶
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š1
+	| ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
 	'''
     appdatafilepath=GetAppdataPath()
     allfilesname=os.listdir(appdatafilepath)
     for name in allfilesname:
         if name.find('Up')!=-1:
             fullpath=os.path.join(appdatafilepath,name)
-            try:
-                os.remove(fullpath)
-            except Exception,e:
-                print e
+            os.remove(fullpath)
     return 1
 
 def HasNewestUp(version=""):
     '''
-	| ##@º¯ÊıÄ¿µÄ: appdataÄ¿Â¼ÏÂµÄÉı¼¶ÎÄ¼şÊÇ·ñÊÇ×îĞÂµÄ
-	| ##@²ÎÊıËµÃ÷£ºupÎÄ¼ş°æ±¾
-	| ##@·µ»ØÖµ£ºTrue
-	| ##@º¯ÊıÂß¼­£º·µ»ØTrue ±íÊ¾Ö»Ê£ÏÂ×îĞÂµÄÉı¼¶°ü»òÕßÃ»ÓĞÉı¼¶°ü false
+	| ##@å‡½æ•°ç›®çš„: appdataç›®å½•ä¸‹çš„å‡çº§æ–‡ä»¶æ˜¯å¦æ˜¯æœ€æ–°çš„
+	| ##@å‚æ•°è¯´æ˜ï¼šupæ–‡ä»¶ç‰ˆæœ¬
+	| ##@è¿”å›å€¼ï¼šTrue
+	| ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›True è¡¨ç¤ºåªå‰©ä¸‹æœ€æ–°çš„å‡çº§åŒ…æˆ–è€…æ²¡æœ‰å‡çº§åŒ… false
 	'''
     appdatafilepath=GetAppdataPath()
     allfilesname=os.listdir(appdatafilepath)
@@ -222,31 +227,25 @@ def HasNewestUp(version=""):
 def GetDesktopPath(opt= ""):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡±¾»úDesktopÂ·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½DesktopÂ·¾¶Ê±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØDesktopÂ·¾¶
+	| ##@å‡½æ•°ç›®çš„: è·å–æœ¬æœºDesktopè·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°Desktopè·¯å¾„æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›Desktopè·¯å¾„
 	'''
-    if DesktopCommon.IsWin7():
-        str = getpass.getuser()
-        strTmp = "C:\\Users\\"
-        strTmp = strTmp + str
-        strTmp = strTmp + "\\Desktop"
-        if opt != "":
-            strTmp = strTmp + opt
-    else:
-        sysDriver=os.getenv("SystemDrive")
-        strTmp=sysDriver+os.environ['HOMEPATH']+"\\×ÀÃæ"
-        if opt != "":
-            strTmp = strTmp + opt
+    str = getpass.getuser()
+    strTmp = "C:\\Users\\"
+    strTmp = strTmp + str
+    strTmp = strTmp + "\\Desktop"
+    if opt != "":
+        strTmp = strTmp + opt
     return strTmp
 
 def CopySrcFileToDestFile(src = "",dest = ""):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ¿½±´ÎÄ¼şµ½fileÄ¿Â¼
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: æ‹·è´æ–‡ä»¶åˆ°fileç›®å½•
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     copy(src,dest);
     return 1;
@@ -254,26 +253,23 @@ def CopySrcFileToDestFile(src = "",dest = ""):
 def ChangeUpdateType(opt= "Notify"):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: ¸Ä±äÉı¼¶·½Ê½£¬¼´¸Ä±äÉèÖÃÖĞcheckboxµÄ¹´Ñ¡×´Ì¬
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º1£¬µ±ÎÄ¼ş²»´æÔÚÊ±£¬ËµÃ÷ÊÇ³õ´Î°²×°£¬³õ´Î°²×°Ä¬ÈÏupdateType=¡®auto¡¯
-	| ##@º¯ÊıÂß¼­£ºĞŞ¸ÄÕıÈ·£¬·µ»Ø1
+	| ##@å‡½æ•°ç›®çš„: æ”¹å˜å‡çº§æ–¹å¼ï¼Œå³æ”¹å˜è®¾ç½®ä¸­checkboxçš„å‹¾é€‰çŠ¶æ€
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š1ï¼Œå½“æ–‡ä»¶ä¸å­˜åœ¨æ—¶ï¼Œè¯´æ˜æ˜¯åˆæ¬¡å®‰è£…ï¼Œåˆæ¬¡å®‰è£…é»˜è®¤updateType=â€˜autoâ€™
+	| ##@å‡½æ•°é€»è¾‘ï¼šä¿®æ”¹æ­£ç¡®ï¼Œè¿”å›1
 	'''
-    
-    strTmp=os.environ["appdata"]
-    strTmp = strTmp + "\\SogouMobileTool\\PDAData\\versionControl.ini"
-    if not os.path.exists(strTmp):
-        print strTmp," does not exits!"
+    str = getpass.getuser()
+    strTmp = "C:\\Users\\"
+    strTmp = strTmp + str
+    strTmp = strTmp + "\\AppData\\Roaming\\SogouMobileTool\\PDAData\\versionControl.ini"
     if not os.path.isfile(strTmp):
         print 'ChangeUpdateType fisrt install'        
         return 1
-    
-    input1   = open(strTmp)
-    lines   = input1.readlines()
-    input1.close()
-    import time
-    time.sleep(2)
-    output1  = open(strTmp,'w');
+    input   = open(strTmp)
+    lines   = input.readlines()
+    input.close()
+
+    output  = open(strTmp,'w');
     for line in lines:
                 #print line
                 if not line:
@@ -282,60 +278,60 @@ def ChangeUpdateType(opt= "Notify"):
                         temp    = "updateType="
                         temp1   = temp + opt
                         temp1 = temp1 + "\n"
-                        output1.write(temp1)
+                        output.write(temp1)
                 else:
-                        output1.write(line)
-    output1.close()
+                        output.write(line)
+    output.close()
     print 'ChangeUpdateType changed'        
     return 1
 
 
+import DesktopCommon
 def GetSikulyPath():
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡Ë¹¿âÀïµÄÖ´ĞĞÂ·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½°æ±¾ºÅÊ±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÎŞ
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØË¹¿âÀïÂ·¾¶
+	| ##@å‡½æ•°ç›®çš„: è·å–æ–¯åº“é‡Œçš„æ‰§è¡Œè·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°ç‰ˆæœ¬å·æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šæ— 
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›æ–¯åº“é‡Œè·¯å¾„
 	'''
     path = "D:\\sikuli\\runIDE.cmd -r "
     return path
 
 def GetSikulipath():
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡sikuli IDEÂ·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½IDEÂ·¾¶Ê±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è·å–sikuli IDEè·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°IDEè·¯å¾„æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     return "D:\\sikuli\\runIDE.cmd"
 
 def GetSikuliScriptPath():
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡sikuli ½Å±¾µÄ±£´æÂ·¾¶
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è·å–sikuli è„šæœ¬çš„ä¿å­˜è·¯å¾„
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     return ""
 
 def GetSikuliexePath(opt = "\\updateModule\\update_checkbox.sikuli"):
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡sikuli½Å±¾Â·¾¶£¬²âÊÔ½Å±¾ÖĞµÄÊ¹ÓÃµ½Â·¾¶Ê±Í³Ò»´ÓÕâÀï»ñÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è·å–sikuliè„šæœ¬è·¯å¾„ï¼Œæµ‹è¯•è„šæœ¬ä¸­çš„ä½¿ç”¨åˆ°è·¯å¾„æ—¶ç»Ÿä¸€ä»è¿™é‡Œè·å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     str = "D:\\autotest\\sikuliscript"
     str = str + opt
     return str
 
-
 def GetLocalHelperVersion(version=''):
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡Ö¸¶¨ÖúÊÖ°æ±¾ÏÂµÄhelper°æ±¾£¬
-	| ##@²ÎÊıËµÃ÷£ºÒÑ¾­°²×°µÄÖúÊÖµÄ°æ±¾
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è·å–æŒ‡å®šåŠ©æ‰‹ç‰ˆæœ¬ä¸‹çš„helperç‰ˆæœ¬ï¼Œ
+	| ##@å‚æ•°è¯´æ˜ï¼šå·²ç»å®‰è£…çš„åŠ©æ‰‹çš„ç‰ˆæœ¬
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     if version=='':
         version=GetZhushouVersion()
@@ -351,15 +347,13 @@ def GetLocalHelperVersion(version=''):
 def GetDesktopZsVersion():
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡ÔÚ±¾»ú×ÀÃæÉÏµÄËÑ¹·ÊÖ»úÖúÊÖµÄ°æ±¾
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÍ³Ò»·µ»ØDesktop°æ±¾
+	| ##@å‡½æ•°ç›®çš„: è·å–åœ¨æœ¬æœºæ¡Œé¢ä¸Šçš„æœç‹—æ‰‹æœºåŠ©æ‰‹çš„ç‰ˆæœ¬
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šç»Ÿä¸€è¿”å›Desktopç‰ˆæœ¬
 	'''
     vartop = GetDesktopPath()
     varver = GetZhushouVersion()
-    if not DesktopCommon.IsWin7():
-        vartop=AddMark2Path(vartop)
     vartop = vartop + "\\SogouMobileToolSetup_"
     vartop = vartop + varver
     vartop = vartop + "_"+GetQNum()+".exe"
@@ -371,10 +365,10 @@ def GetLoaclh():
 
 def RunCmd(cmd):
 	'''
-	| ##@º¯ÊıÄ¿µÄ: ÔËĞĞcmd²¢ÊäÈë²ÎÊı
-	| ##@²ÎÊıËµÃ÷£ºÔÚcmdÄÚ´«ÈëµÄ²ÎÊı
-	| ##@·µ»ØÖµ£ºcmdÄÚµÄÊä³ö
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è¿è¡Œcmdå¹¶è¾“å…¥å‚æ•°
+	| ##@å‚æ•°è¯´æ˜ï¼šåœ¨cmdå†…ä¼ å…¥çš„å‚æ•°
+	| ##@è¿”å›å€¼ï¼šcmdå†…çš„è¾“å‡º
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
         if len(cmd) < 5:
             print "!!!!Command is invalid!!!!"
@@ -387,11 +381,11 @@ def RunCmd(cmd):
 
 def RunSikuli(cmd):
 	'''
-	| ##@º¯ÊıÄ¿µÄ: ÔËĞĞsikuli
-	| ##@²ÎÊıËµÃ÷£ºµ÷ÓÃsikuliµÄÃüÁîĞĞ²ÎÊı
-	| ##@·µ»ØÖµ£º0±íÊ¾sikuliÖĞcaseÖ´ĞĞ³É¹¦£¬-1±íÊ¾sikuliÖĞcaseÓĞÊ§°Ü
-	| ##@º¯ÊıÂß¼­£ºµ÷ÓÃsikuli²¢¶ÁÈ¡ÃüÁîĞĞ·µ»ØĞÅÏ¢£¬´òÓ¡´íÎóĞÅÏ¢
-	| ##@zsret=failedºÍzsret=succeedÊÇ°üº¬ÔÚsikuliÕıÈ·ºÍ´íÎóÊä³ö
+	| ##@å‡½æ•°ç›®çš„: è¿è¡Œsikuli
+	| ##@å‚æ•°è¯´æ˜ï¼šè°ƒç”¨sikuliçš„å‘½ä»¤è¡Œå‚æ•°
+	| ##@è¿”å›å€¼ï¼š0è¡¨ç¤ºsikuliä¸­caseæ‰§è¡ŒæˆåŠŸï¼Œ-1è¡¨ç¤ºsikuliä¸­caseæœ‰å¤±è´¥
+	| ##@å‡½æ•°é€»è¾‘ï¼šè°ƒç”¨sikuliå¹¶è¯»å–å‘½ä»¤è¡Œè¿”å›ä¿¡æ¯ï¼Œæ‰“å°é”™è¯¯ä¿¡æ¯
+	| ##@zsret=failedå’Œzsret=succeedæ˜¯åŒ…å«åœ¨sikuliæ­£ç¡®å’Œé”™è¯¯è¾“å‡º
 	'''
 	#cmd = "D:\\Script\\sikuli\\runIDE.cmd -r C:\\Users\\zhangshuai203407\\Desktop\\123.skl"
 	try:
@@ -436,10 +430,10 @@ def CheckZhushouDirFileNum(zsPath):
 
 def GetProcessNum(processName):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ¼ì²éÖ¸¶¨Ãû×Ö½ø³ÌµÄÊıÄ¿
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º½ø³ÌÊıÁ¿
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
+	| ##@å‡½æ•°ç›®çš„: æ£€æŸ¥æŒ‡å®šåå­—è¿›ç¨‹çš„æ•°ç›®
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè¿›ç¨‹æ•°é‡
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ¯”è¾ƒ
 	'''
     import psutil
     num = 0
@@ -457,20 +451,21 @@ def GetSgMobileToolSetupProcessNum():
 
 def GetZSUninstallNumAndKill(ifKill = False):
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡ÖúÊÖĞ¶ÔØ½ø³ÌÊı£¬²¢Í¨¹ı±êÖ¾Î»¾õµÃÊÇ·ñkill
-	| ##@²ÎÊıËµÃ÷£º±êÖ¾ÊÇ·ñkillĞ¶ÔØ½ø³Ì
-	| ##@·µ»ØÖµ£º½ø³ÌÊıÁ¿
-	| ##@º¯ÊıÂß¼­£º±éÀúÕıÔò±È½Ï
+	| ##@å‡½æ•°ç›®çš„: è·å–åŠ©æ‰‹å¸è½½è¿›ç¨‹æ•°ï¼Œå¹¶é€šè¿‡æ ‡å¿—ä½è§‰å¾—æ˜¯å¦kill
+	| ##@å‚æ•°è¯´æ˜ï¼šæ ‡å¿—æ˜¯å¦killå¸è½½è¿›ç¨‹
+	| ##@è¿”å›å€¼ï¼šè¿›ç¨‹æ•°é‡
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ­£åˆ™æ¯”è¾ƒ
 	'''
     import psutil
     import re
-    # ½«ÕıÔò±í´ïÊ½±àÒë³ÉPattern¶ÔÏó
+    # å°†æ­£åˆ™è¡¨è¾¾å¼ç¼–è¯‘æˆPatternå¯¹è±¡
 #    pattern = re.compile(r'~PA...\.tmp\.exe')
     cnt = 0
     processList = list(psutil.process_iter())
-    for p in processList:
+    for process in processList:
         try:
-            if p.name.find("~PA")!=-1 and p.name.find(".tmp.exe")!=-1:
+            if process.name.find("~PA")!=-1 and process.name.find(".tmp.exe")!=-1:
+            #pattern.match(process.name) != None:
                 cnt += 1
                 if ifKill:
                     DesktopCommon.StopProcess(process.name)
@@ -478,25 +473,11 @@ def GetZSUninstallNumAndKill(ifKill = False):
             continue
     return cnt
 
-def KillZSUnistallProcess():
-    '''
-    É±µô´óÖúÊÖ½ø³Ì
-    '''
-    import psutil
-    processList=list(psutil.process_iter())
-    for p in processList:
-        try:
-            if p.name.find("~PA")!=-1 and p.name.find(".tmp.exe"):
-                DesktopCommon.StopProcess(p.name)
-        except Exception,e:
-            print e
-
 def GetSgMobileUninstallProcessNum():
     return GetProcessNum("SogouPAUnInstall.exe")+GetZSUninstallNumAndKill()
 
 
 def CheckFeedbackURL(url):
-    
     if len(url)==0:
         print "url len == 0 !!!"
         return False
@@ -506,7 +487,6 @@ def CheckFeedbackURL(url):
         return False
     keyvalues = paraList[1].split("&")
     if len(keyvalues) != 3:
-        print 'keyvalues'
         return False
     for para in keyvalues:
         values = para.split("=")
@@ -514,55 +494,46 @@ def CheckFeedbackURL(url):
             return False
         if values[0] == "r":
             if values[1] != "000000":
-                print 'r'
                 return False
         elif values[0] == "h":
             if values[1] != GetLoaclh():
-                print 'h'
                 return False
         elif values[0] == "v":
             if values[1] != GetZhushouVersion():
-                print 'v:'
                 return False
     return True
 
 
 def ResetEnv():
+    GetZSUninstallNumAndKill(True)
+    if DesktopCommon.IsProcessExist("SogouMobileTool.exe"):
+        DesktopCommon.StopProcess("SogouMobileTool.exe")
+    setupName = "SogouMobileToolSetup_"+GetZhushouVersion()+"_000000.exe"
+    if DesktopCommon.IsProcessExist(setupName):
+        DesktopCommon.StopProcess(setupName)
+    sikulipath = GetSikulyPath()
     zsUninstallString = DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","UninstallString")
-    #ÅĞ¶ÏÊÇ·ñÓĞÖúÊÖ
-    KillZSUnistallProcess()
     if len(zsUninstallString)!=0:
-        if DesktopCommon.IsProcessExist("SogouMobileTool.exe"):
-            DesktopCommon.StopProcess("SogouMobileTool.exe")
-        setupName = "SogouMobileToolSetup_"+GetZhushouVersion()+"_"+GetQNum()+".exe"
-        if DesktopCommon.IsProcessExist(setupName):
-            DesktopCommon.StopProcess(setupName)
-        sikulipath = GetSikulyPath()
-        zsUninstallString = DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","UninstallString")
-        if len(zsUninstallString)!=0:
-            RunCmd("\""+zsUninstallString+"\"")
-            ret = RunSikuli(sikulipath+"E:\\Install_Uninstall\\UninstallDirectly.skl")
-        if DesktopCommon.IsProcessExist("SogouPAUnInstall.exe"):
-            DesktopCommon.StopProcess("SogouPAUnInstall.exe")
-        if DesktopCommon.IsProcessExist("SogouPAUnInstall.exe"):
-            DesktopCommon.StopProcess("SogouPAUnInstall.exe")
-        if DesktopCommon.IsProcessExist("SogouMobileTool.exe"):
-            DesktopCommon.StopProcess("SogouMobileTool.exe")
-        setupName = "SogouMobileToolSetup_"+GetZhushouVersion()+"_"+GetQNum()+".exe"
-        if DesktopCommon.IsProcessExist(setupName):
-            DesktopCommon.StopProcess(setupName)
+        RunCmd("\""+zsUninstallString+"\"")
+        ret = RunSikuli(sikulipath+"E:\\Install_Uninstall\\UninstallDirectly.skl")
+
+    if DesktopCommon.IsProcessExist("SogouPAUnInstall.exe"):
+        DesktopCommon.StopProcess("SogouPAUnInstall.exe")
+    if DesktopCommon.IsProcessExist("SogouMobileTool.exe"):
+        DesktopCommon.StopProcess("SogouMobileTool.exe")
+    setupName = "SogouMobileToolSetup_"+GetZhushouVersion()+"_"+GetQNum()+".exe"
+    if DesktopCommon.IsProcessExist(setupName):
+        DesktopCommon.StopProcess(setupName)
         
-def backupUserData(src='',dest=''):
+def backupUserData():
     '''
-	| ##@º¯ÊıÄ¿µÄ: ±¸·İÓÃ»§Êı¾İ£¬ÒÔ±ãÖ®ºóÅĞ¶ÏÊÇ·ñ¸Ä±ä
-	| ##@²ÎÊıËµÃ÷£ºÉı¼¶ÀàĞÍ£¬ÇşµÀºÅ
-	| ##@·µ»ØÖµ£ºÊÇ·ñÕıÈ·
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
+	| ##@å‡½æ•°ç›®çš„: å¤‡ä»½ç”¨æˆ·æ•°æ®ï¼Œä»¥ä¾¿ä¹‹ååˆ¤æ–­æ˜¯å¦æ”¹å˜
+	| ##@å‚æ•°è¯´æ˜ï¼šå‡çº§ç±»å‹ï¼Œæ¸ é“å·
+	| ##@è¿”å›å€¼ï¼šæ˜¯å¦æ­£ç¡®
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ¯”è¾ƒ
 	'''
-    if len(src)==0:
-        src=DesktopCommon.GetAppPath() + "\\SogouMobileTool\\PDAData\\versionControl.ini"
-    if(len(dest)==0):
-        dest="D:/versionControl.ini"
+    src=DesktopCommon.GetAppPath() + "\\SogouMobileTool\\PDAData\\versionControl.ini"
+    dest="D:\\versionControl.ini"
     if os.path.isfile(dest):
         os.remove(dest)
     copy(src,dest);
@@ -571,10 +542,10 @@ def backupUserData(src='',dest=''):
 
 def CheckUserData(updateType="Auto",routeNum="000000"):
     '''
-	| ##@º¯ÊıÄ¿µÄ: Ğ£ÑéÓÃ»§Êı¾İÊÇ·ñ±»ÖØÖÃ
-	| ##@²ÎÊıËµÃ÷£ºÉı¼¶ÀàĞÍ£¬ÇşµÀºÅ
-	| ##@·µ»ØÖµ£ºÊÇ·ñÕıÈ·
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
+	| ##@å‡½æ•°ç›®çš„: æ ¡éªŒç”¨æˆ·æ•°æ®æ˜¯å¦è¢«é‡ç½®
+	| ##@å‚æ•°è¯´æ˜ï¼šå‡çº§ç±»å‹ï¼Œæ¸ é“å·
+	| ##@è¿”å›å€¼ï¼šæ˜¯å¦æ­£ç¡®
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ¯”è¾ƒ
 	'''
 
     cf1 = ConfigParser.ConfigParser()
@@ -627,280 +598,36 @@ def CheckUserData(updateType="Auto",routeNum="000000"):
 ##        print 'NoRemind'
 ##        return False
 
-    AppConfirm = cf1.get("ConfirmDlgNoShow","AppConfirm")
-    appAppConfirm = cf2.get("ConfirmDlgNoShow","AppConfirm")
-    if len(AppConfirm)!=0 and len(appAppConfirm)!=0:
-        if AppConfirm != appAppConfirm:
-            print 'AppConfirm'
-            return False
+##    AppConfirm = cf1.get("ConfirmDlgNoShow","AppConfirm")
+##    appAppConfirm = cf2.get("ConfirmDlgNoShow","AppConfirm")
+##    if AppConfirm != appAppConfirm:
+##        print 'AppConfirm'
+##        return False
 
-    LastExamTime = cf1.get("Optimize","LastExamTime")
-    appLastExamTime = cf2.get("Optimize","LastExamTime")
-    if len(LastExamTime)!=0 and len(appLastExamTime)!=0:
-        if LastExamTime != appLastExamTime:
-            print 'LastExamTime'
-            return False
+##    LastExamTime = cf1.get("Optimize","LastExamTime")
+##    appLastExamTime = cf2.get("Optimize","LastExamTime")
+##    if LastExamTime != appLastExamTime:
+##        print 'LastExamTime'
+##        return False
+
     return True
-
-def CheckUserSetting(updateType="Auto",routeNum="000000"):
-    '''
-	| ##@º¯ÊıÄ¿µÄ: Ğ£Ñé°²×°ºóÓÃ»§Êı¾İÊÇ·ñ±»ÖØÖÃ
-	| ##@²ÎÊıËµÃ÷£º°²×°Ğ¶ÔØÊ±Ê¹ÓÃµÄº¯Êı£¬ÇşµÀºÅ
-	| ##@·µ»ØÖµ£ºÊÇ·ñÕıÈ·
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
-	'''
-
-    cf1 = ConfigParser.ConfigParser()
-    cf2 = ConfigParser.ConfigParser()
-    cf1.read("D:\\versionControl.ini")
-    cf2.read(DesktopCommon.GetAppPath() + "\\SogouMobileTool\\PDAData\\versionControl.ini")
-    if not os.path.exists("D:\\versionControl.ini"):
-        print 'D:\\versionControl.ini does not exists'
-    #¼ì²éGeneralÏÂµÄÖµ
-    #DBHOME
-    a1=cf1.get("General","DBHOME")
-    a2 = cf2.get("General","DBHOME")
-    if a1 != a2:
-        print "DBHOME"
-        print a1
-        print a2
-        return False
-    #Check
-    a1=cf1.get("General","Check")
-    a2 = cf2.get("General","Check")
-    if a1 != a2:
-        print "Check"
-        print a1
-        print a2
-        return False
-    #NewDNewDeviceUrl
-    a1=cf1.get("General","NewDeviceUrl")
-    a2 = cf2.get("General","NewDeviceUrl")
-    if a1 != a2:
-        print "NewDeviceUrl"
-        print a1
-        print a2
-        return False
-
-    #PingBackUrl
-    a1=cf1.get("General","PingBackUrl")
-    a2 = cf2.get("General","PingBackUrl")
-    if a1 != a2:#"Auto":
-        print "PingBackUrl"
-        print a1
-        print a2
-        return False
-    
-    #Route»á±»ĞŞÕı
-    approute = cf2.get("General","Route")
-    num="\""+GetQNum()+"\""
-    if  str(approute) !=num:#routeNum != approute and "\""+routeNum+"\"" != approute:
-        print "routeNum"
-        print approute
-        print GetQNum()
-        return False
-
-    
-    #¼ì²éSettingÏÂµÄÖµ
-    #closeToMinSize
-    a1=cf1.get("Setting","closeToMinSize")
-    a2 = cf2.get("Setting","closeToMinSize")
-    if a1 != a2:#"Auto":
-        print "closeToMinSize"
-        print a1
-        print a2
-        return False
-    #updateType»á±»ĞŞÕı
-    #a1=cf1.get("Setting","updateType")
-    a2 = cf2.get("Setting","updateType")
-    if a2 != "Auto":
-        print "appUpType"
-        print a1
-        print a2
-        return False
-
-    #autoConn
-    a1=cf1.get("Setting","autoConn")
-    a2 = cf2.get("Setting","autoConn")
-    if a1 != a2:
-        print "autoConn"
-        print a2
-        print a1
-        return False
-    #savePath
-    a1=cf1.get("Setting","savePath")
-    a2 = cf2.get("Setting","savePath")
-    if a1 != a2:
-        print "savePath"
-        print a2
-        print a1
-        return False
-
-    #imageSavePath
-    a1=cf1.get("Setting","imageSavePath")
-    a2 = cf2.get("Setting","imageSavePath")
-    if a1 != a2:
-        print "imageSavePath"
-        print a2
-        print a1
-        return False
-    #apk
-    a1=cf1.get("Setting","apk")
-    a2 = cf2.get("Setting","apk")
-    if a2 != '1':
-        print "apk"
-        print a2
-        print a1
-        return False
-    #AutoCheckRelation
-    a1=cf1.get("Setting","AutoCheckRelation")
-    a2 = cf2.get("Setting","AutoCheckRelation")
-    if a2 != a1:
-        print "AutoCheckRelation"
-        print a2
-        print a1
-        return False
-    #AutoRelation
-    a1=cf1.get("Setting","AutoRelation")
-    a2 = cf2.get("Setting","AutoRelation")
-    if a2 != a1:
-        print "AutoRelation"
-        print a2
-        print a1
-        return False
-    #installToSD
-    a1=cf1.get("Setting","installToSD")
-    a2 = cf2.get("Setting","installToSD")
-    if a2 != a1:
-        print "installToSD"
-        print a2
-        print a1
-        return False
-    #installLocalApkPath
-    a1=cf1.get("Setting","installLocalApkPath")
-    a2 = cf2.get("Setting","installLocalApkPath")
-    if a2 != a1:
-        print "installLocalApkPath"
-        print a2
-        print a1
-        return False
-    #widgetSwitch
-    a1=cf1.get("Setting","widgetSwitch")
-    a2 = cf2.get("Setting","widgetSwitch")
-    if a2 != a1:
-        print "widgetSwitch"
-        print a2
-        print a1
-        return False
-    #SMTUsedNum
-    a1=cf1.get("Setting","SMTUsedNum")
-    a2 = cf2.get("Setting","SMTUsedNum")
-    if a2 != a1:
-        print "SMTUsedNum"
-        print a2
-        print a1
-        return False
-    #¼ì²éAppUpReminderÏÂµÄÖµ
-    #ManuClose
-    a1=cf1.get("AppUpReminder","ManuClose")
-    a2 = cf2.get("AppUpReminder","ManuClose")
-    if a2 != a1:
-        print "ManuClose"
-        print a2
-        print a1
-        return False
-    #NoRemind
-    a1=cf1.get("AppUpReminder","NoRemind")
-    a2 = cf2.get("AppUpReminder","NoRemind")
-    if a2 != a1:
-        print "NoRemind"
-        print a2
-        print a1
-        return False
-    #LastRemindTime
-    a1=cf1.get("AppUpReminder","LastRemindTime")
-    a2 = cf2.get("AppUpReminder","LastRemindTime")
-    if a2 != a1:
-        print "LastRemindTime"
-        print a2
-        print a1
-        return False
-    #¼ì²éWidget
-    #wgtAtDft
-    a1=cf1.get("Widget","wgtAtDft")
-    a2 = cf2.get("Widget","wgtAtDft")
-    if a2 != a1:
-        print "wgtAtDft"
-        print a2
-        print a1
-        return False
-    #WgtConnDft
-    a1=cf1.get("Widget","WgtConnDft")
-    a2 = cf2.get("Widget","WgtConnDft")
-    if a2 != a1:
-        print "WgtConnDft"
-        print a2
-        print a1
-        return False
-    #widgetTopMost
-    a1=cf1.get("Widget","widgetTopMost")
-    a2 = cf2.get("Widget","widgetTopMost")
-    if a2 != a1:
-        print "widgetTopMost"
-        print a2
-        print a1
-        return False
-    #widgetTip
-    a1=cf1.get("Widget","widgetTip")
-    a2 = cf2.get("Widget","widgetTip")
-    if a2 != a1:
-        print "widgetTip"
-        print a2
-        print a1
-        return False
-    #wgtFileAnim
-    a1=cf1.get("Widget","wgtFileAnim")
-    a2 = cf2.get("Widget","wgtFileAnim")
-    if a2 != a1:
-        print "wgtFileAnim"
-        print a2
-        print a1
-        return False
-    #¼ì²éConfirmDlgNoShow
-    #AppConfirm
-    a1=cf1.get("ConfirmDlgNoShow","AppConfirm")
-    a2 = cf2.get("ConfirmDlgNoShow","AppConfirm")
-    if a2 != a1:
-        print "AppConfirm"
-        print a2
-        print a1
-        return False
- #   ¼ì²éOptimize
-    a1=cf1.get("Optimize","LastExamTime")
-    a2 = cf2.get("Optimize","LastExamTime")
-    if a2 != a1:
-        print "LastExamTime"
-        print a2
-        print a1
-    return True
-
 
 def RenameSrcFileToDestFile(src = "",dest = ""):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÖØÃüÃûÎÄ¼ş
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: é‡å‘½åæ–‡ä»¶
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     os.rename(src,dest);
     return 1
 
 def RunFiddler():
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÔËĞĞfiddler,
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£ºÓ¦ÏÈÔÚ×¢²á±íÖĞĞ´ÈëfiddlerµÄÆô¶¯Ïî£¨ÈÃfillder¿ª»úÆô¶¯¾Í»áÓĞÏàÓ¦µÄÆô¶¯Ïî£©
+	| ##@å‡½æ•°ç›®çš„: è¿è¡Œfiddler,
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š
+	| ##@å‡½æ•°é€»è¾‘ï¼šåº”å…ˆåœ¨æ³¨å†Œè¡¨ä¸­å†™å…¥fiddlerçš„å¯åŠ¨é¡¹ï¼ˆè®©fillderå¼€æœºå¯åŠ¨å°±ä¼šæœ‰ç›¸åº”çš„å¯åŠ¨é¡¹ï¼‰
 	'''
     FiddlerExEPath = DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run","Fiddler")
     DesktopCommon.StartProcess(FiddlerExEPath)
@@ -908,10 +635,10 @@ def RunFiddler():
 
 def CheckUpdateTypeData(updateType="Auto"):
     '''
-	| ##@º¯ÊıÄ¿µÄ: Ğ£ÑéÓÃ»§Êı¾İÊÇ·ñ±»ÖØÖÃ
-	| ##@²ÎÊıËµÃ÷£ºÉı¼¶ÀàĞÍ
-	| ##@·µ»ØÖµ£ºÊÇ·ñÕıÈ·
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
+	| ##@å‡½æ•°ç›®çš„: æ ¡éªŒç”¨æˆ·æ•°æ®æ˜¯å¦è¢«é‡ç½®
+	| ##@å‚æ•°è¯´æ˜ï¼šå‡çº§ç±»å‹
+	| ##@è¿”å›å€¼ï¼šæ˜¯å¦æ­£ç¡®
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ¯”è¾ƒ
 	'''
     cf2 = ConfigParser.ConfigParser()
     cf2.read(DesktopCommon.GetAppPath() + "\\SogouMobileTool\\PDAData\\versionControl.ini")
@@ -922,10 +649,10 @@ def CheckUpdateTypeData(updateType="Auto"):
 
 def CheckRouteData(routeNum="000000"):
     '''
-	| ##@º¯ÊıÄ¿µÄ: Ğ£ÑéÓÃ»§Êı¾İÊÇ·ñ±»ÖØÖÃ
-	| ##@²ÎÊıËµÃ÷£ºÇşµÀºÅ
-	| ##@·µ»ØÖµ£ºÊÇ·ñÕıÈ·
-	| ##@º¯ÊıÂß¼­£º±éÀú±È½Ï
+	| ##@å‡½æ•°ç›®çš„: æ ¡éªŒç”¨æˆ·æ•°æ®æ˜¯å¦è¢«é‡ç½®
+	| ##@å‚æ•°è¯´æ˜ï¼šæ¸ é“å·
+	| ##@è¿”å›å€¼ï¼šæ˜¯å¦æ­£ç¡®
+	| ##@å‡½æ•°é€»è¾‘ï¼šéå†æ¯”è¾ƒ
 	'''
     cf2 = ConfigParser.ConfigParser()
     cf2.read(DesktopCommon.GetAppPath() + "\\SogouMobileTool\\PDAData\\versionControl.ini")
@@ -938,10 +665,10 @@ def CheckRouteData(routeNum="000000"):
 def CheckUserIsWhat(opt = "English"):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÅĞ¶Ï±¾»úÕË»§ÃûÊÇ·ñÎªÓ¢ÎÄ»òÕßÊÇÖĞÎÄ
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£ºÖ»¶ÔÈ«ÊÇÓ¢ÎÄ»òÈ«ÊÇÖĞÎÄµÄ½øĞĞÅĞ¶Ï£¬¶ÔÖĞÓ¢ÎÄ»ìºÏÇé¿ö²»´¦Àí
+	| ##@å‡½æ•°ç›®çš„: åˆ¤æ–­æœ¬æœºè´¦æˆ·åæ˜¯å¦ä¸ºè‹±æ–‡æˆ–è€…æ˜¯ä¸­æ–‡
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼šåªå¯¹å…¨æ˜¯è‹±æ–‡æˆ–å…¨æ˜¯ä¸­æ–‡çš„è¿›è¡Œåˆ¤æ–­ï¼Œå¯¹ä¸­è‹±æ–‡æ··åˆæƒ…å†µä¸å¤„ç†
 	'''
     str = getpass.getuser()
     #slength = len(str)
@@ -958,10 +685,10 @@ def CheckUserIsWhat(opt = "English"):
 
 def is_alphabet(uchar):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÅĞ¶Ï×Ö·ûÊÇ·ñÎªÓ¢ÎÄ×Ö·û
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: åˆ¤æ–­å­—ç¬¦æ˜¯å¦ä¸ºè‹±æ–‡å­—ç¬¦
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     if (uchar >= u'\u0041' and uchar<=u'\u005a') or (uchar >= u'\u0061' and uchar<=u'\u007a'):
         return True
@@ -970,36 +697,38 @@ def is_alphabet(uchar):
 
 def windowsKeyboardImitate(opt1 = "win",opt2 = "d"):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ÏÔÊ¾×ÀÃæ£¬ÈÃ×ÀÃæÎŞÕÚµ²Îï
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: æ˜¾ç¤ºæ¡Œé¢ï¼Œè®©æ¡Œé¢æ— é®æŒ¡ç‰©
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
-    win32api.keybd_event(91,0,0,0)  #win¼üÎ»ÂëÊÇ91
-    win32api.keybd_event(68,0,0,0)  #d¼üÎ»ÂëÊÇ68
-    win32api.keybd_event(68,0,win32con.KEYEVENTF_KEYUP,0) #ÊÍ·Å°´¼ü
+    win32api.keybd_event(91,0,0,0)  #winé”®ä½ç æ˜¯91
+    win32api.keybd_event(68,0,0,0)  #dé”®ä½ç æ˜¯68
+    win32api.keybd_event(68,0,win32con.KEYEVENTF_KEYUP,0) #é‡Šæ”¾æŒ‰é”®
     win32api.keybd_event(91,0,win32con.KEYEVENTF_KEYUP,0)
 
 def GetAppdataCrashPath(opt= ""):
 
     '''
-	| ##@º¯ÊıÄ¿µÄ: »ñÈ¡±¾»úappdataÂ·¾¶ÏÂµÄcrashÎÄ¼şÈ¡
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£ºÂ·¾¶
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: è·å–æœ¬æœºappdataè·¯å¾„ä¸‹çš„crashæ–‡ä»¶å–
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼šè·¯å¾„
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
-    strTmp = os.environ['appdata']
-    strTmp = strTmp + "\\SogouMobileTool\\Log"
+    str = getpass.getuser()
+    strTmp = "C:\\Users\\"
+    strTmp = strTmp + str
+    strTmp = strTmp + "\\AppData\\Roaming\\SogouMobileTool\\Log"
     if opt != "":
         strTmp = strTmp + opt
     return strTmp
 
 def delete_file_folder(src):
     '''
-	| ##@º¯ÊıÄ¿µÄ: É¾³ıÎÄ¼ş¼Ğ
-	| ##@²ÎÊıËµÃ÷£ºÎŞ
-	| ##@·µ»ØÖµ£º1
-	| ##@º¯ÊıÂß¼­£º·µ»Ø1 ±íÊ¾É¾³ıÍê³É»òÕßÃ»ÓĞ¸ÃÎÄ¼ş
+	| ##@å‡½æ•°ç›®çš„: åˆ é™¤æ–‡ä»¶å¤¹
+	| ##@å‚æ•°è¯´æ˜ï¼šæ— 
+	| ##@è¿”å›å€¼ï¼š1
+	| ##@å‡½æ•°é€»è¾‘ï¼šè¿”å›1 è¡¨ç¤ºåˆ é™¤å®Œæˆæˆ–è€…æ²¡æœ‰è¯¥æ–‡ä»¶
 	'''
     if os.path.isfile(src):
         try:
@@ -1017,10 +746,10 @@ def delete_file_folder(src):
 
 def MonitorCrashAndRename(opt1,opt2):
     '''
-	| ##@º¯ÊıÄ¿µÄ: ²é¿´appdataÏÂÊÇ·ñ²úÉúcrash£¬Èç¹û²úÉú£¬Ö±½Ó¼ôÇĞµ½PerfmonitorÄ¿Â¼ÏÂµÄLogÈÕÖ¾ÎÄ¼ş¼ĞÖĞ£¬²¢ÖØÃüÃûÎªCase±àºÅ
-	| ##@²ÎÊıËµÃ÷£ºopt1±íÊ¾crashÂ·¾¶£¬opt2Îªcasex.zip
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£º
+	| ##@å‡½æ•°ç›®çš„: æŸ¥çœ‹appdataä¸‹æ˜¯å¦äº§ç”Ÿcrashï¼Œå¦‚æœäº§ç”Ÿï¼Œç›´æ¥å‰ªåˆ‡åˆ°Perfmonitorç›®å½•ä¸‹çš„Logæ—¥å¿—æ–‡ä»¶å¤¹ä¸­ï¼Œå¹¶é‡å‘½åä¸ºCaseç¼–å·
+	| ##@å‚æ•°è¯´æ˜ï¼šopt1è¡¨ç¤ºcrashè·¯å¾„ï¼Œopt2ä¸ºcasex.zip
+	| ##@è¿”å›å€¼ï¼š
+	| ##@å‡½æ•°é€»è¾‘ï¼š
 	'''
     src = opt1 + "\\CrashReport.zip"
     dst = opt1 + "\\" + opt2
@@ -1033,115 +762,3 @@ def MonitorCrashAndRename(opt1,opt2):
             DelAppdataFile(dst)
         except:
             pass
-
-def CheckReg(quickLaunch=False):
-    '''
-	| ##@º¯ÊıÄ¿µÄ: ¼ì²é×¢²á±í¸÷ÏîÊÇ·ñÕıÈ·
-	| ##@²ÎÊıËµÃ÷£ºopt1±íÊ¾crashÂ·¾¶£¬opt2Îªcasex.zip
-	| ##@·µ»ØÖµ£º
-	| ##@º¯ÊıÂß¼­£º
-	'''
-    #¼ì²éÓĞµÄÏî
-    #Path
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool","Path")
-    if value!="C:\\Program Files\\SogouMobileTool":
-        print value,'path'
-        return False
-    #Components
-    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Components")
-    
-    if not exist:
-        print exist,'components'
-        return False
-    
-    #pb
-    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\pb")
-    
-    if not exist:
-        print exist,'pb'
-        return False
-    #PopUpConfigÖúÊÖµ¯´°ÉèÖÃµÄ
-##    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\PopUpConfig")
-##    if not exist:
-##        print exist
-##        return False
-    #Update
-    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update")
-    if not exist:
-        print exist,'update'
-        return False
-    #Update Ö®Desktop
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","Desktop")
-    if value!="create":
-        print value,'create'
-        return False
-    #Update Ö®MainVersion
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","MainVersion")
-    if value!=str(GetZhushouVersion()):
-        print value,'MainVersion'
-        return False
-    #Update Ö®QS ÈôÎª´´½¨¿ì½İ·½Ê½
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","QS")
-    if not quickLaunch and value!="nocreate":
-        print value,'QS'
-        return False
-    #Update Ö®Startmenu
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","Startmenu")
-    if value!="create":
-        print value,'startmenu'
-        return False
-    #Update Ö®UserExperience
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\Update","UserExperience")
-    if value!="create":
-        print value,'UserExperience'
-        return False
-    
-    #SoDa
-    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\SogouMobileTool\\SoDa")
-    if not exist:
-        print exist,'SoDa'
-        return False
-    #MENG
-    exist=DesktopCommon.IsRegExist("HKEY_CURRENT_USER\\Software\\MENG")
-    if not exist:
-        print exist,'MENG'
-        return False
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\MENG","sign")
-    if str(value)!=str(1):
-        print 'Meng',value
-        print 'No'
-        return False
-    
-    #Run¿ª»úÆô¶¯Ïî
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run","SogouMobileTool")
-    if value!="\"C:\\Program Files\\SogouMobileTool\\SogouMobileToolHelper.exe\"":
-        print value,'RUn'
-        return False
-    #Uninstall
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","DisplayIcon")
-    if value!="C:\\Program Files\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
-        print value,'Uninstall'
-        return False
-    value=DesktopCommon.GetRegValue("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool","UninstallString")
-    if value!="C:\\Program Files\\SogouMobileTool\\"+GetZhushouVersion()+"\\uninstall.exe":
-        print value,'Uninstall'
-        return False
-    #¼ì²éÃ»ÓĞµÄÏî
-    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool")
-    if exist:
-        print '1',exist
-        return False  
-    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\SogouMobileTool")
-    if exist:
-        print '2',exist
-        return False
-    value=value=DesktopCommon.GetRegValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run","SogouMobileTool")
-    if len(value)!=0:
-        print '3',exist
-        return False
-    exist=DesktopCommon.IsRegExist("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\SogouMobileTool")
-    if exist:
-        print '4',exist
-        return False 
-    
-    return True
