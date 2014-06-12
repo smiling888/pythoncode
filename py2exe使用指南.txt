@@ -1,0 +1,9 @@
+mysetup.py示例如下:
+# mysetup.py
+from distutils.core import setup
+import py2exe
+
+setup(console=["helloworld.py"])
+然后按下面的方法运行mysetup.py:
+python mysetup.py py2exe
+上面的命令执行后将产生一个名为dist的子目录，其中包含了helloworld.exe,python24.dll,library.zip这些文件。
