@@ -7,11 +7,12 @@ import subprocess
 
 class MainUI(wx.Frame):
     def __init__(self,parent,title):
-        super(MainUI,self).__init__(parent,title=title,size=(300,400))
+        super(MainUI,self).__init__(parent,title=title,size=(200,400))
 
         self.IniUI()
         self.Center()
-        self.Show()
+
+        #self.Show()
 
     def IniUI(self):
         panel=wx.Panel(self)
@@ -22,17 +23,16 @@ class MainUI(wx.Frame):
         midPan=wx.Panel(panel)
         midPan.SetBackgroundColour("#ededed")
 
-        vbox.Add(midPan,2,wx.EXPAND|wx.ALL,40)
+        vbox.Add(midPan,2,wx.EXPAND|wx.ALL,1)
         panel.SetSizer(vbox)
 
     def Center(self):
         pass
 
-    def Show(self):
-        pass
+
 if __name__=="__main__":
     app=wx.App()
-    MainUI(None,title="TestTools")
+    MainUI(None,title="TestTools").Show(True)
     app.MainLoop()
     print 'tt'
 
