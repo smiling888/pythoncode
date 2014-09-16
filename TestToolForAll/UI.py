@@ -32,7 +32,10 @@ class MainUI(wx.Frame):
 
 if __name__=="__main__":
     app=wx.App()
-    MainUI(None,title="TestTools").Show(True)
+    frame=MainUI(None,title="TestTools")
+    # 设置窗口出现的位置。
+    frame.SetPosition( wx.Point( 1000, 100 ) )
+    frame.Show(True)
     app.MainLoop()
     print 'tt'
 
