@@ -1,7 +1,7 @@
 #coding=utf-8
 import wx
 import os
-
+import ConfigParser
 from Common import *
 import subprocess
 
@@ -40,9 +40,21 @@ class MainUI(wx.Frame):
         #添加运行服务器文件按钮
         self.runSerGen=wx.Button(panel,-1,u"Ser配置文件生成器",pos=(10,135))
         self.Bind(wx.EVT_BUTTON,self.RunUpdateServerFileGenerator,self.runSerGen)
-
-
-
+        #添加运行HelpZip工具
+        self.helperZip=wx.Button(panel,-1,u"HelperZip工具",pos=(10,165))
+        self.Bind(wx.EVT_BUTTON,self.HelperZip,self.helperZip)
+        #添加启动GenerateLocalIni工具
+        self.generateLocalIni=wx.Button(panel,-1,u"GenerateLocalIni工具",pos=(10,195))
+        self.Bind(wx.EVT_BUTTON,self.GenerateLocalIni,self.generateLocalIni)
+        #添加启动Fiddler工具
+        self.fiddler=wx.Button(panel,-1,u"Fiddler",pos=(10,225))
+        self.Bind(wx.EVT_BUTTON,self.Fiddler,self.fiddler)
+        #添加启动Winscp工具
+        self.winscp=wx.Button(panel,-1,u"Winscp",pos=(10,255))
+        self.Bind(wx.EVT_BUTTON,self.Winscp,self.winscp)
+        #添加启动SecureCRT工具
+        self.secureCRT=wx.Button(panel,-1,u"SecureCRT工具",pos=(10,285))
+        self.Bind(wx.EVT_BUTTON,self.SecureCRT,self.secureCRT)
         #vbox=wx.BoxSizer(wx.VERTICAL)
         #midPan=wx.Panel(panel)
         #midPan.SetBackgroundColour("#ededed")
@@ -53,7 +65,28 @@ class MainUI(wx.Frame):
     def Center(self):
         pass
 
-
+    def SecureCRT(self,event):
+        path=self.GetAppSetting('Setting','SecureCRT')
+        subprocess.Popen(path,shell=True)
+        return
+    def Winscp(self,event):
+        path=self.GetAppSetting('Setting','Winscp')
+        subprocess.Popen(path,shell=True)
+        return
+    def Fiddler(self,event):
+        path=self.GetAppSetting('Setting','Fiddler')
+        subprocess.Popen(path,shell=True)
+        return 
+    def HelperZip(self,event):
+        path=self.GetAppSetting('Setting','HelpZipPath')
+        subprocess.Popen(path,shell=True)
+        return
+    def GenerateLocalIni(self,event):
+        path=self.GetAppSetting('Setting','GenerateLocalIni')
+        subprocess.Popen(path,shell=True)
+        return
+    
+    
 
     def OpenFiles(self,event):
         ##打开Files文件
@@ -85,6 +118,23 @@ class MainUI(wx.Frame):
         print type(event)
         print event.GetEventType()
         return
+    
+    def GetAppSetting(self,module="",key=""):
+    #解析程序路径配置
+        
+        cf=ConfigParser.ConfigParser()
+        if not os.path.exists("AppSeting.ini") or len(module)==0 or len(key)==0:
+            mes=u'AppSeting.ini不在当前目录下'
+            dlg=wx.MessageDialog(None,mes,u'运行出错',wx.OK,pos=wx.DefaultPosition)
+            retCode=dlg.ShowModal()
+            if (retCode == wx.ID_OK):
+                print 'yes'
+            else:
+                print 'no'
+            dlg.Destroy()
+            return
+        cf.read("D:\\versionControl.ini")
+        return cf.get(module,key)
 
 if __name__=="__main__":
     app=wx.App()
@@ -96,20 +146,8 @@ if __name__=="__main__":
     app.MainLoop()
     print 'tt'
 
-def GetAppSetting():
-    #解析程序路径配置
 
-    cf=ConfigParser.ConfigParser()
-    if not os.path.exists("AppSeting.ini"):
-        mes=u'AppSeting.ini不在当前目录下'
-        dlg=wx.MessageDialog(None,mes,u'运行出错',wx.OK,pos=wx.DefaultPosition)
-        retCode=dlg.ShowModal()
-        if (retCode == wx.ID_OK):
-            print 'yes'
-        else:
-            print 'no'
-        dlg.Destroy()
-        return
+    
     
 def funcctionStardan():
     '''
