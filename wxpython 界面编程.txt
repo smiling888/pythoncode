@@ -1,0 +1,2 @@
+wxFormBuilder 
+http://blog.csdn.net/zhangxinrun/article/details/7518831
