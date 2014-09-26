@@ -1,6 +1,6 @@
 #coding=utf-8
 import wx
-print 'aa'
+#print 'aa'
 
 def GetAppSetting():
     #解析程序路径配置

@@ -75,8 +75,10 @@ class MainUI(wx.Frame):
         return
     def Fiddler(self,event):
         path=self.GetAppSetting('Setting','Fiddler')
-        subprocess.Popen(path,shell=True)
-        return 
+        #print 'fiddler'
+        #print path
+        subprocess.Popen(path,shell=False)
+        return
     def HelperZip(self,event):
         path=self.GetAppSetting('Setting','HelpZipPath')
         subprocess.Popen(path,shell=True)
@@ -85,15 +87,15 @@ class MainUI(wx.Frame):
         path=self.GetAppSetting('Setting','GenerateLocalIni')
         subprocess.Popen(path,shell=True)
         return
-    
-    
+
+
 
     def OpenFiles(self,event):
         ##打开Files文件
         appdataFiles=GetAppdata()
         cmd='start '+appdataFiles+' /SogouMobileTool'
         os.system(cmd)
-        print 'opened'
+        #print 'opened'
     def OpenReg(self,event):
         #打开注册表程序
         os.system('regedit')
@@ -113,15 +115,15 @@ class MainUI(wx.Frame):
         path=os.getcwd()+'/UpdateServerFileGenerator.exe'
         #os.execl(path,'')
         subprocess.Popen(path,shell=True)
-        print 'run'
-        print dir(event)
-        print type(event)
-        print event.GetEventType()
+        #print 'run'
+        #print dir(event)
+        #print type(event)
+        #print event.GetEventType()
         return
-    
+
     def GetAppSetting(self,module="",key=""):
     #解析程序路径配置
-        
+
         cf=ConfigParser.ConfigParser()
         if not os.path.exists("AppSeting.ini") or len(module)==0 or len(key)==0:
             mes=u'AppSeting.ini不在当前目录下'
@@ -133,7 +135,7 @@ class MainUI(wx.Frame):
                 print 'no'
             dlg.Destroy()
             return
-        cf.read("D:\\versionControl.ini")
+        cf.read("AppSeting.ini")
         return cf.get(module,key)
 
 if __name__=="__main__":
@@ -144,11 +146,11 @@ if __name__=="__main__":
     frame.Show(True)
     #frame.Iconize(True)
     app.MainLoop()
-    print 'tt'
+    #print 'tt'
 
 
-    
-    
+
+
 def funcctionStardan():
     '''
 	| ##@函数目的: 编写规范
