@@ -1,59 +1,37 @@
 #  -*- coding:utf-8 -*- 
 
+
 import pygame
-
-
-
-
-
-
-
-
-
-
-background_image_filename = 'images/sushiplate.jpg'
-mouse_image_filename = 'images/fugu.png'
-#指定图像文件名称
- 
-import pygame
-#导入pygame库
 from pygame.locals import *
-#导入一些常用的函数和常量
 from sys import exit
-#向sys模块借一个exit函数用来退出程序
  
 pygame.init()
-#初始化pygame,为使用硬件做准备
+SCREEN_SIZE = (640, 480)
+screen = pygame.display.set_mode(SCREEN_SIZE, 0, 32)
  
-screen = pygame.display.set_mode((640, 480), 0, 32)
-#创建了一个窗口
-pygame.display.set_caption("Hello, World!")
-#设置窗口标题
- 
-background = pygame.image.load(background_image_filename).convert()
-mouse_cursor = pygame.image.load(mouse_image_filename).convert_alpha()
-#加载并转换图像
+font = pygame.font.SysFont("arial", 16);
+font_height = font.get_linesize()
+event_text = []
  
 while True:
-#游戏主循环
  
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            #接收到退出事件后退出程序
-            exit()
+    event = pygame.event.wait()
+    event_text.append(str(event))
+    #获得时间的名称
+    event_text = event_text[-SCREEN_SIZE[1]/font_height:]
+    #这个切片操作保证了event_text里面只保留一个屏幕的文字
  
-    screen.blit(background, (0,0))
-    #将背景图画上去
+    if event.type == QUIT:
+        exit()
  
-    x, y = pygame.mouse.get_pos()
-    #获得鼠标位置
-    print x
-    x-= mouse_cursor.get_width() / 2
-    print x
-    y-= mouse_cursor.get_height() / 2
-    
-    #计算光标的左上角位置
-    screen.blit(mouse_cursor, (x, y))
-    #把光标画上去
+    screen.fill((255, 255, 255))
+ 
+    y = SCREEN_SIZE[1]-font_height
+    #找一个合适的起笔位置，最下面开始但是要留一行的空
+    for text in reversed(event_text):
+        screen.blit( font.render(text, True, (0, 0, 0)), (0, y) )
+        #以后会讲
+        y-=font_height
+        #把笔提一行
  
     pygame.display.update()
