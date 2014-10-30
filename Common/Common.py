@@ -23,7 +23,11 @@ def GetSelfFilepath():
     | ##@函数逻辑：
     '''
     return __file__
-
+def LambdaTest(x1,y1):
+    #当行的小函数
+    g =lambda x,y:x*y
+    return g(x1,y1)
+    
 
 def GetArgs():
     '''
