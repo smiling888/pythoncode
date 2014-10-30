@@ -56,7 +56,8 @@ class MyFrame1 ( wx.Frame ):
 		IsZhushouExits()
 		#判断是否装了360
 		Is360Exists()
-		
+
+#
 app=wx.App()
 frame=MyFrame1(None)
 frame.Show(True)
