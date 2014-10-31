@@ -28,12 +28,29 @@ void pointAndArrays(void){
 	}
 
 }
+// º¯ÊıÖ¸Õë
+int add(int a, int b){
+return a+b;
+
+}
+int op(int a, int b, int (*fun)(int ,int)){
+  return fun(a,b);
+}
+struct fruit{
+	float weight;
+	double price;
+}apple,banana,melon;
+
 int main(){
 	int a(12);
 	cout<<sum(10,1)<<endl;
 	cout<<myname::x<<endl;
 	cout<<a<<endl;
 	pointAndArrays();
+	cout<<op(1,2,add);
+	apple.weight=10.0;
+	apple.price=20.0;
+cout<<apple.price<<endl;
 	system("pause");
 	return 0;
 }
