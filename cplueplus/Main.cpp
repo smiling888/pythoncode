@@ -1,5 +1,5 @@
 #include <iostream>
-
+#define getmax1(a,b) ((a)>(b)?(a):(b))
 using namespace std;
 
 template <class T,class N>
@@ -9,6 +9,18 @@ T sum(T a,N b ){
 namespace myname{
 	int x=15;
 }
+
+class ThisTest{
+
+public:
+	bool  isitme(ThisTest &th){
+		if(&th==this){
+			return true;
+		}
+		return false;
+	}
+};
+
 
 void pointAndArrays(void){
 	cout<<"------------------------------"<<endl;
@@ -41,6 +53,26 @@ struct fruit{
 	double price;
 }apple,banana,melon;
 
+
+//class template
+template <class T>
+class mypair{
+	T a,b;
+public:
+	mypair(T first,T second){
+		a=first;
+		b=second;
+	}
+	T getmax();
+};
+
+template <class T>
+T mypair<T>::getmax(){
+	
+	return a>b?a:b;
+	
+}
+
 int main(){
 	int a(12);
 	cout<<sum(10,1)<<endl;
@@ -51,6 +83,14 @@ int main(){
 	apple.weight=10.0;
 	apple.price=20.0;
 cout<<apple.price<<endl;
+
+	cout<<"thistest----------"<<endl;
+	ThisTest ta;
+	ThisTest *tb=&ta;
+	if(tb->isitme(ta))
+		cout<<"yes it is me"<<endl;
+	
+	cout<<getmax1(2,5)<<endl;
 	system("pause");
 	return 0;
 }
