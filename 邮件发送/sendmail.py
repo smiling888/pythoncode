@@ -10,7 +10,7 @@ import time
 #import persistent
 class MyEmail:
   """this moudle is for send email lzs 2006.08.26"""
-  def __init__(self,femail='lzhhua110@126.com',fpwd='zhenhua@liao520',tmail='liaozhenhua@sogou-inc.com',subject='hello',):
+  def __init__(self,femail='from_email@eamil',fpwd='pwd',tmail='toemail@email',subject='hello',):
       self.femail=femail
       self.fpwd=fpwd
       self.temail=tmail
