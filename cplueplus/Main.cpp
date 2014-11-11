@@ -92,7 +92,7 @@ void numOfChar(char *t){
 }
 
 
-int strlen1(const char *str){
+int myStrlen(const char *str){
 	if(str==NULL){
 		return 0;
 	}
@@ -104,19 +104,25 @@ int strlen1(const char *str){
 	}
 	return len;
 }
-class dddd
-{
-public:
-protected:
-private:
-};
+
+//my_strcp ×Ö·û´®¸´ÖÆ
+char *my_strcp(char *dest1,char *src1){
+	if(NULL==dest1||NULL==src1)
+		return NULL; //throw "Invalid argument(s)"
+	while((*dest1++=*src1++)!='\0'){
+
+	}
+	return dest1;
+}
+//my_aoti
+//my_itoa
+//my_strcmp
+
 int main(){
-	
-	char *foo="hello";
-	cout<<strlen(foo);
-	numOfChar(foo);
-	dddd d;
-	cout<<sizeof(d)<<endl;
+	char  *dest1;
+	char  *src1="hello"	;
+	my_strcp(dest1,src1);
+	cout<<dest1<<endl;
 	system("pause");
 	return 0;
 }
