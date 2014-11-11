@@ -73,24 +73,50 @@ T mypair<T>::getmax(){
 	
 }
 
-int main(){
-	int a(12);
-	cout<<sum(10,1)<<endl;
-	cout<<myname::x<<endl;
-	cout<<a<<endl;
-	pointAndArrays();
-	cout<<op(1,2,add);
-	apple.weight=10.0;
-	apple.price=20.0;
-cout<<apple.price<<endl;
 
-	cout<<"thistest----------"<<endl;
-	ThisTest ta;
-	ThisTest *tb=&ta;
-	if(tb->isitme(ta))
-		cout<<"yes it is me"<<endl;
+
+void numOfChar(char *t){
+	int count[256]={0};
+	int len=0;
+	while(*t!='\0'){
+		count[*t++]++;
+		len++;
+	}
+	int i=0;
+	t=t-len;
+	while (*t!='\0')
+	{
+		cout<<*t<<":"<<count[*t]<<endl;
+		t++;
+	}
+}
+
+
+int strlen1(const char *str){
+	if(str==NULL){
+		return 0;
+	}
+//count<<"tag"'<<endl;
+	int len=0;
+	while((*str++)!='\0'){
+		len++;
+
+	}
+	return len;
+}
+class dddd
+{
+public:
+protected:
+private:
+};
+int main(){
 	
-	cout<<getmax1(2,5)<<endl;
+	char *foo="hello";
+	cout<<strlen(foo);
+	numOfChar(foo);
+	dddd d;
+	cout<<sizeof(d)<<endl;
 	system("pause");
 	return 0;
 }
