@@ -1,4 +1,5 @@
 #include <iostream>
+#include <assert.h>
 #define getmax1(a,b) ((a)>(b)?(a):(b))
 using namespace std;
 
@@ -116,13 +117,35 @@ char *my_strcp(char *dest1,char *src1){
 }
 //my_aoti
 //my_itoa
-//my_strcmp
+//my_strcmp str1>str?1:(str1<str2?-1:0)
+int my_strcmp(const char *str1,const char *str2){
+	//ิดย๋
+	//while((ret=*(unsigned char *)string1-*(unsigned char *)string2++)==0 && *string1++);
+
+
+	int ret=0;
+	assert((NULL != str1) && (NULL != str2));
+	while(str1&&str2&&str1==str2){
+		str1++;
+		str2++;
+	}
+	cout<<str2;
+	if(str1>str2){
+		ret=1;
+	}
+	else if(str1<str2){
+		ret=-1;
+	}else{
+		ret=0;
+	}
+	return ret;
+
+}
 
 int main(){
-	char  *dest1;
-	char  *src1="hello"	;
-	my_strcp(dest1,src1);
-	cout<<dest1<<endl;
+	char *a;
+	char *b="b";
+	cout<<strcmp(b,a);
 	system("pause");
 	return 0;
 }
