@@ -141,11 +141,63 @@ int my_strcmp(const char *str1,const char *str2){
 	return ret;
 
 }
+//函数指针
+typedef void (*fun1)(char ,int);
+void bar(char ch,int i){
+	cout<<ch<<"  "<<i<<endl;
+	return;
+}
 
+void functionPointer(){
+	
+	fun1 f;
+	f = bar;
+	f('a',1);
+	return ;
+}
+// 函数对象 在main中调用如下
+//Funcc f;
+//addFunc(2,3,f);
+class Funcc{
+public:
+	int operator()(int a,int b){
+		return a;
+	}
+};
+int addFunc(int a,int b,Funcc &func1){
+	
+	func1(a,b);
+	return a;
+}
+// 枚举
+enum keyword1{Key1,Key2};
+void showenum(keyword1 k1){
+	cout<<k1;
+	return ;
+};
+
+void sizeofTest(){
+	cout<<endl;
+	char str1[]="aa";
+	char *str="aa";
+	char *p=str1;
+	int n=10;
+	cout<<sizeof(str)<<endl;
+	cout<<sizeof(str1)<<endl;
+	cout<<sizeof(p)<<endl;
+	cout<<sizeof(n)<<endl;
+}
 int main(){
-	char *a;
-	char *b="b";
-	cout<<strcmp(b,a);
+	Funcc f;
+	addFunc(2,3,f);
+	bool b=true;
+	bool a=false;
+	cout<<b<<" "<<a<<endl;
+	keyword1 k=Key1;
+	showenum(k);
+	k=Key2;
+	showenum(k);
+	sizeofTest();
 	system("pause");
 	return 0;
 }
